@@ -9,6 +9,7 @@ gem 'jquery-rails', '~> 4.0.3'
 gem 'turbolinks', '~> 2.5.3'
 gem 'unicorn', '~> 4.8.3'
 gem 'active_model_serializers', '~> 0.9.3'
+gem 'devise', '~> 3.4.1'
 
 group :development, :test do
   gem 'byebug'
