@@ -14,4 +14,7 @@ group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem 'rspec-rails', '~> 3.2.0'
+  gem 'fabrication', '~> 2.12.2'
+  gem 'ffaker', '~> 1.32.1'
 end
