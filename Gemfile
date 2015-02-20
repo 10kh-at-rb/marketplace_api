@@ -12,10 +12,14 @@ gem 'active_model_serializers', '~> 0.9.3'
 gem 'devise', '~> 3.4.1'
 
 group :development, :test do
-  gem 'byebug'
+  gem 'byebug', '~> 3.5.1'
   gem 'web-console', '~> 2.0'
-  gem 'spring'
+  gem 'spring', '~> 1.3.2'
   gem 'rspec-rails', '~> 3.2.0'
   gem 'fabrication', '~> 2.12.2'
   gem 'ffaker', '~> 1.32.1'
+end
+
+group :test do
+  gem 'shoulda-matchers', '~> 2.8.0', require: false
 end
