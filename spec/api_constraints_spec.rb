@@ -1,6 +1,6 @@
 require 'api_constraints'
 
-describe ApiConstraints do
+RSpec.describe ApiConstraints do
   describe "matches?" do
     it "returns true when the version matches the 'Accept' header" do
       api_constraints = ApiConstraints.new(version: 1)
