@@ -16,7 +16,7 @@ RSpec.describe Api::V1::UsersController do
       get :show, id: @user.id
     end
 
-    it { should respond_with :ok }
+    it { is_expected.to respond_with :ok }
 
     it "returns user in json format" do
       expect(json_response[:email]).to eql @user.email
@@ -30,7 +30,7 @@ RSpec.describe Api::V1::UsersController do
         post :create, user: @user_attributes
       end
 
-      it { should respond_with :created }
+      it { is_expected.to respond_with :created }
 
       it "renders created user in json" do
         expect(json_response[:email]).to eql(@user_attributes[:email])
@@ -44,7 +44,7 @@ RSpec.describe Api::V1::UsersController do
         post :create, user: invalid_user_attributes
       end
 
-      it { should respond_with :unprocessable_entity }
+      it { is_expected.to respond_with :unprocessable_entity }
 
       it "renders json with errors" do
         expect(json_response).to have_key(:errors)
@@ -60,7 +60,7 @@ RSpec.describe Api::V1::UsersController do
                        user: { email: "user@example.io" }
       end
 
-      it { should respond_with :ok }
+      it { is_expected.to respond_with :ok }
 
       it "renders updated user in json" do
         expect(json_response[:email]).to eql "user@example.io"
@@ -73,7 +73,7 @@ RSpec.describe Api::V1::UsersController do
                        user: { email: "bademail.com" }
       end
 
-      it { should respond_with :unprocessable_entity }
+      it { is_expected.to respond_with :unprocessable_entity }
 
       it "renders json with errors" do
         expect(json_response).to have_key(:errors)
@@ -88,7 +88,7 @@ RSpec.describe Api::V1::UsersController do
       delete :destroy, id: @user.id
     end
 
-    it { should respond_with :no_content }
+    it { is_expected.to respond_with :no_content }
 
     it "destroys the user" do
       expect { User.find(@user.id) }.to raise_error
