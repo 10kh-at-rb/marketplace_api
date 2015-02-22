@@ -34,9 +34,9 @@ RSpec.describe Api::V1::UsersController do
 
     context "on error" do
       before(:example) do
-        @invalid_user_attributes = { password: "12345678",
-                                     password_confirmation: "12345678" }
-        post :create, user: @invalid_user_attributes, format: :json
+        invalid_user_attributes = { password: "12345678",
+                                    password_confirmation: "12345678" }
+        post :create, user: invalid_user_attributes, format: :json
       end
 
       it { should respond_with :unprocessable_entity }
@@ -52,14 +52,13 @@ RSpec.describe Api::V1::UsersController do
   describe "PUT/PATCH #update" do
     context "on success" do
       before(:example) do
-        @user = Fabricate(:user)
-        patch :update, id: @user.id,
+        patch :update, id: Fabricate(:user).id,
                        user: { email: "user@example.io" }, format: :json
       end
 
       it { should respond_with :ok }
 
-      it "renders created user in json" do
+      it "renders updated user in json" do
         user_response = JSON.parse(response.body, symbolize_names: true)
         expect(user_response[:email]).to eql "user@example.io"
       end
@@ -67,8 +66,7 @@ RSpec.describe Api::V1::UsersController do
 
     context "on error" do
       before(:example) do
-        @user = Fabricate(:user)
-        patch :update, id: @user.id,
+        patch :update, id: Fabricate(:user).id,
                        user: { email: "bademail.com" }, format: :json
       end
 
@@ -79,6 +77,19 @@ RSpec.describe Api::V1::UsersController do
         expect(user_response).to have_key(:errors)
         expect(user_response[:errors][:email]).to include("is invalid")
       end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    before(:example) do
+      @user = Fabricate(:user)
+      delete :destroy, id: @user.id, format: :json
+    end
+
+    it { should respond_with :no_content }
+
+    it "destroys the user" do
+      expect { User.find(@user.id) }.to raise_error
     end
   end
 end
