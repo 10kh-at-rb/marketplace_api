@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController do
+  def json_response
+    @json_response ||= JSON.parse(response.body, symbolize_names: true)
+  end
+
   before(:example) { request.headers['Accept'] = "application/vnd.marketplace.v1" }
 
   describe "GET #show" do
@@ -12,8 +16,7 @@ RSpec.describe Api::V1::UsersController do
     it { should respond_with :ok }
 
     it "returns user in json format" do
-      user_response = JSON.parse(response.body, symbolize_names: true)
-      expect(user_response[:email]).to eql @user.email
+      expect(json_response[:email]).to eql @user.email
     end
   end
 
@@ -27,8 +30,7 @@ RSpec.describe Api::V1::UsersController do
       it { should respond_with :created }
 
       it "renders created user in json" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
-        expect(user_response[:email]).to eql(@user_attributes[:email])
+        expect(json_response[:email]).to eql(@user_attributes[:email])
       end
     end
 
@@ -42,9 +44,8 @@ RSpec.describe Api::V1::UsersController do
       it { should respond_with :unprocessable_entity }
 
       it "renders json with errors" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
-        expect(user_response).to have_key(:errors)
-        expect(user_response[:errors][:email]).to include("can't be blank")
+        expect(json_response).to have_key(:errors)
+        expect(json_response[:errors][:email]).to include("can't be blank")
       end
     end
   end
@@ -59,8 +60,7 @@ RSpec.describe Api::V1::UsersController do
       it { should respond_with :ok }
 
       it "renders updated user in json" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
-        expect(user_response[:email]).to eql "user@example.io"
+        expect(json_response[:email]).to eql "user@example.io"
       end
     end
 
@@ -73,9 +73,8 @@ RSpec.describe Api::V1::UsersController do
       it { should respond_with :unprocessable_entity }
 
       it "renders json with errors" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
-        expect(user_response).to have_key(:errors)
-        expect(user_response[:errors][:email]).to include("is invalid")
+        expect(json_response).to have_key(:errors)
+        expect(json_response[:errors][:email]).to include("is invalid")
       end
     end
   end
