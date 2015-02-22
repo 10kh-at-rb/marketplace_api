@@ -13,8 +13,9 @@ gem 'devise', '~> 3.4.1'
 gem 'responders', '~> 2.1.0'
 
 group :development, :test do
-  gem 'byebug', '~> 3.5.1'
-  gem 'web-console', '~> 2.0'
+  gem 'pry-rails', '~> 0.3.3'
+  gem 'better_errors', '~> 2.1.1'
+  gem 'binding_of_caller', '~> 0.7.3pre1'
   gem 'spring', '~> 1.3.2'
   gem 'rspec-rails', '~> 3.2.0'
   gem 'fabrication', '~> 2.12.2'
