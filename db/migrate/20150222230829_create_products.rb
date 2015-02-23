@@ -8,6 +8,6 @@ class CreateProducts < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_foreign_key :products, :users
+    add_foreign_key :products, :users, on_delete: :cascade
   end
 end
