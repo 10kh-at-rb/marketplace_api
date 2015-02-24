@@ -11,6 +11,7 @@ gem 'unicorn', '~> 4.8.3'
 gem 'active_model_serializers', '~> 0.9.3'
 gem 'devise', '~> 3.4.1'
 gem 'responders', '~> 2.1.0'
+gem 'friendly_id', '~> 5.1.0'
 
 group :development, :test do
   gem 'pry-rails', '~> 0.3.3'
