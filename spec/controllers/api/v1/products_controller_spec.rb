@@ -3,28 +3,22 @@ require 'request_helpers'
 
 RSpec.describe Api::V1::ProductsController do
   describe "GET #show" do
-    before(:example) do
-      @product = Fabricate(:product)
-      get :show, id: @product.id
-    end
-
-    it { is_expected.to respond_with :ok }
-
     it "returns the product in json" do
-      expect(json_response[:title]).to eq(@product.title)
+      product = Fabricate(:product)
+      get :show, id: product.slug
+
+      expect(json_response[:title]).to eq(product.title)
+      expect(response).to have_http_status(:ok)
     end
   end
 
   describe "GET #index" do
-    before(:example) do
+    it "returns a list of products in json" do
       3.times { Fabricate(:product) }
       get :index
-    end
 
-    it { is_expected.to respond_with :ok }
-
-    it "returns a list of products in json" do
       expect(json_response[:products].size).to eq(3)
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -34,7 +28,7 @@ RSpec.describe Api::V1::ProductsController do
         user = Fabricate(:user)
         product_attributes = Fabricate.attributes_for(:product_without_user)
         api_authorization_header(user.auth_token)
-        post :create, user_id: user.id, product: product_attributes
+        post :create, user_id: user.name, product: product_attributes
 
         expect(json_response[:title]).to eq(product_attributes[:title])
         expect(response).to have_http_status(:created)
@@ -45,10 +39,23 @@ RSpec.describe Api::V1::ProductsController do
       it "returns the errors" do
         user = Fabricate(:user)
         api_authorization_header(user.auth_token)
-        post :create, user_id: user.id, product: { title: "Eye", price: "One dollar" }
+        post :create, user_id: user.name, product: { title: "Eye", price: "Ha'penny" }
 
         expect(json_response[:errors][:price]).to include("is not a number")
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context "unauthorized" do
+      it "returns an unauthorized error" do
+        user = Fabricate(:user)
+        another_user = Fabricate(:user)
+        api_authorization_header(user.auth_token)
+        post :create, user_id: another_user.name,
+          product: { title: "Moon", price: 563463634634634.42 }
+
+        expect(json_response[:errors]).to include("Not authorized")
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

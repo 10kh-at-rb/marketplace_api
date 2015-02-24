@@ -29,7 +29,6 @@ RSpec.describe Api::V1::UsersController do
                                password_confirmation: "12345678" }
         post :create, user: invalid_attributes
 
-        expect(json_response).to have_key(:errors)
         expect(json_response[:errors][:email]).to include("can't be blank")
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -54,7 +53,6 @@ RSpec.describe Api::V1::UsersController do
         api_authorization_header(user.auth_token)
         patch :update, id: user.name, user: { email: "bademail.com" }
 
-        expect(json_response).to have_key(:errors)
         expect(json_response[:errors][:email]).to include("is invalid")
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -66,7 +64,6 @@ RSpec.describe Api::V1::UsersController do
         api_authorization_header("invalid_auth_token")
         patch :update, id: user.name, user: { email: "user@example.io" }
 
-        expect(json_response).to have_key(:errors)
         expect(json_response[:errors]).to include("Not authorized")
         expect(response).to have_http_status(:unauthorized)
       end
@@ -79,7 +76,6 @@ RSpec.describe Api::V1::UsersController do
         api_authorization_header(user.auth_token)
         patch :update, id: other_user.name, user: { email: "user@example.io" }
 
-        expect(json_response).to have_key(:errors)
         expect(json_response[:errors]).to include("Not authorized")
         expect(response).to have_http_status(:unauthorized)
       end
@@ -105,7 +101,6 @@ RSpec.describe Api::V1::UsersController do
         api_authorization_header(user.auth_token)
         delete :destroy, id: another_user.name
 
-        expect(json_response).to have_key(:errors)
         expect(json_response[:errors]).to include("Not authorized")
         expect(response).to have_http_status(:unauthorized)
       end
@@ -117,7 +112,6 @@ RSpec.describe Api::V1::UsersController do
         api_authorization_header("invalid_auth_token")
         delete :destroy, id: user.name
 
-        expect(json_response).to have_key(:errors)
         expect(json_response[:errors]).to include("Not authorized")
         expect(response).to have_http_status(:unauthorized)
       end

@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   respond_to :json
   before_action :authenticate_with_token!, only: [:update, :destroy]
-  before_action :authorize, only: [:update, :destroy]
+  before_action :authorize!, only: [:update, :destroy]
 
   def show
     respond_with User.friendly.find(params[:id])
@@ -29,11 +29,5 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
-  end
-
-  def authorize
-    if User.friendly.find(params[:id]) != current_user
-      render json: { errors: "Not authorized" }, status: :unauthorized
-    end
   end
 end
