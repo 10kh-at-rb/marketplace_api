@@ -3,21 +3,25 @@ require 'request_helpers'
 
 RSpec.describe Api::V1::ProductsController do
   describe "GET #show" do
-    it "returns the product in json" do
+    it "returns the product with user in json" do
       product = Fabricate(:product)
       get :show, id: product.slug
 
       expect(json_response[:data][:title]).to eq(product.title)
+      expect(json_response[:data][:user][:name]).to eq(product.user.name)
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe "GET #index" do
-    it "returns a list of products in json" do
+    it "returns a list of products with users in json" do
       3.times { Fabricate(:product) }
       get :index
 
       expect(json_response[:data].size).to eq(3)
+      json_response[:data].each do |product|
+        expect(product[:user]).to be_present
+      end
       expect(response).to have_http_status(:ok)
     end
   end
