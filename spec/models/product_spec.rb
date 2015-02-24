@@ -15,4 +15,19 @@ RSpec.describe Product do
   it "is not for sale by default" do
     expect(subject).not_to be_for_sale
   end
+
+  describe "#slug" do
+    it "is parameterized title by default" do
+      product = Fabricate(:product)
+      expect(product.slug).to eq(product.title.parameterize)
+    end
+
+    it "is parameterized title + user.name if title is taken" do
+      Fabricate(:product, title: "Mechanical Keyboard")
+      product = Fabricate(:product, title: "Mechanical Keyboard")
+      expect(product.slug).to eq(
+        "#{product.title}-by-#{product.user.name}".parameterize
+      )
+    end
+  end
 end
