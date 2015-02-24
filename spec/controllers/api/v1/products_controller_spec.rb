@@ -7,7 +7,7 @@ RSpec.describe Api::V1::ProductsController do
       product = Fabricate(:product)
       get :show, id: product.slug
 
-      expect(json_response[:title]).to eq(product.title)
+      expect(json_response[:data][:title]).to eq(product.title)
       expect(response).to have_http_status(:ok)
     end
   end
@@ -17,12 +17,12 @@ RSpec.describe Api::V1::ProductsController do
       3.times { Fabricate(:product) }
       get :index
 
-      expect(json_response[:products].size).to eq(3)
+      expect(json_response[:data].size).to eq(3)
       expect(response).to have_http_status(:ok)
     end
   end
 
-  fdescribe "POST #create" do
+  describe "POST #create" do
     context "success" do
       it "returns the created product" do
         user = Fabricate(:user)
@@ -30,7 +30,7 @@ RSpec.describe Api::V1::ProductsController do
         api_authorization_header(user.auth_token)
         post :create, user_id: user.name, product: product_attributes
 
-        expect(json_response[:title]).to eq(product_attributes[:title])
+        expect(json_response[:data][:title]).to eq(product_attributes[:title])
         expect(response).to have_http_status(:created)
       end
     end

@@ -7,7 +7,7 @@ RSpec.describe Api::V1::UsersController do
       user = Fabricate(:user)
       get :show, id: user.name
 
-      expect(json_response[:name]).to eq(user.name)
+      expect(json_response[:data][:name]).to eq(user.name)
       expect(response).to have_http_status(:ok)
     end
   end
@@ -18,7 +18,7 @@ RSpec.describe Api::V1::UsersController do
         attributes = Fabricate.attributes_for(:user)
         post :create, user: attributes
 
-        expect(json_response[:name]).to eq(attributes[:name])
+        expect(json_response[:data][:name]).to eq(attributes[:name])
         expect(response).to have_http_status(:created)
       end
     end
@@ -42,7 +42,7 @@ RSpec.describe Api::V1::UsersController do
         api_authorization_header(user.auth_token)
         patch :update, id: user.name, user: { email: "user@example.io" }
 
-        expect(json_response[:email]).to eq("user@example.io")
+        expect(json_response[:data][:email]).to eq("user@example.io")
         expect(response).to have_http_status(:ok)
       end
     end
