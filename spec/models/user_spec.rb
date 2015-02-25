@@ -27,14 +27,21 @@ RSpec.describe User do
   end
 
   context "when destroyed" do
-    it "all associated products get destroyed" do
-      user = Fabricate(:user) do
-        products(count: 3)
-      end
+    specify "all associated products get destroyed" do
+      user = Fabricate(:user_with_products)
       products = user.products
       user.destroy
       products.each do |product|
         expect { Product.find(product.id) }.to raise_error
+      end
+    end
+
+    specify "all associated orders get destroyed" do
+      user = Fabricate(:user_with_orders)
+      orders = user.orders
+      user.destroy
+      orders.each do |order|
+        expect { Order.find(order.id) }.to raise_error
       end
     end
   end

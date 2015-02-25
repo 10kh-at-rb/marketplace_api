@@ -6,6 +6,6 @@ class CreateOrders < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    add_foreign_key :orders, :users
+    add_foreign_key :orders, :users, on_delete: :cascade
   end
 end

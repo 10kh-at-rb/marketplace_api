@@ -8,3 +8,7 @@ end
 Fabricator(:user_with_products, from: :user) do
   products(count: 3)
 end
+
+Fabricator(:user_with_orders, from: :user) do
+  orders(count: 3)
+end
