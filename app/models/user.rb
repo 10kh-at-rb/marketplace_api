@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :products
+  has_many :orders
 
   validates :auth_token, uniqueness: true
   validates :name, presence: true,

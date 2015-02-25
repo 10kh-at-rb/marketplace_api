@@ -11,6 +11,7 @@ RSpec.describe User do
   it { is_expected.to validate_confirmation_of(:password) }
   it { is_expected.to allow_value("user@example.io").for(:email) }
   it { is_expected.to have_many(:products) }
+  it { is_expected.to have_many(:orders) }
 
   describe "#generate_auth_token!" do
     it "generates a unique token" do
