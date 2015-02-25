@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225082151) do
+ActiveRecord::Schema.define(version: 20150225170238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,9 +31,9 @@ ActiveRecord::Schema.define(version: 20150225082151) do
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
-    t.decimal  "total",      null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.decimal  "total",      default: 0.0, null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
@@ -48,12 +48,12 @@ ActiveRecord::Schema.define(version: 20150225082151) do
 
   create_table "products", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "title",                              default: "",    null: false
-    t.boolean  "for_sale",                           default: false
-    t.decimal  "price",      precision: 8, scale: 2, default: 0.0,   null: false
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.string   "slug",                                               null: false
+    t.string   "title",      default: "",    null: false
+    t.boolean  "for_sale",   default: false
+    t.decimal  "price",      default: 0.0,   null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "slug",                       null: false
   end
 
   add_index "products", ["slug"], name: "index_products_on_slug", unique: true, using: :btree

@@ -75,4 +75,49 @@ RSpec.describe Api::V1::OrdersController do
       end
     end
   end
+
+  describe "POST #create" do
+    context "correct order" do
+      it "returns the just user order record" do
+        current_user = Fabricate(:user)
+        api_authorization_header(current_user.auth_token)
+        p1, p2 = Fabricate(:product), Fabricate(:product)
+
+        expect do
+          post :create, user_id: current_user.name,
+                        order: { product_ids: [p1.id, p2.id] }
+        end.to change(Order, :count).by(1)
+
+        expect(json_response[:data][:id]).to be_present
+        expect(response).to have_http_status(:created)
+      end
+    end
+
+    context "when trying to order for another user" do
+      it "returns the unauthorized error" do
+        current_user, another_user = Fabricate(:user), Fabricate(:user)
+        p1, p2 = Fabricate(:product), Fabricate(:product)
+        api_authorization_header(current_user.auth_token)
+
+        post :create, user_id: another_user.name,
+                      order: { product_ids: [p1.id, p2.id] }
+
+        expect(json_response[:errors]).to include("Not authorized")
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "unauthenticated" do
+      it "returns the unauthorized error" do
+        current_user = Fabricate(:user)
+        p1, p2 = Fabricate(:product), Fabricate(:product)
+
+        post :create, user_id: current_user.name,
+                      order: { product_ids: [p1.id, p2.id] }
+
+        expect(json_response[:errors]).to include("Not authorized")
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end
