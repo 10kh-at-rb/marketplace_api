@@ -44,9 +44,12 @@ RSpec.describe Api::V1::OrdersController do
         current_user = Fabricate(:user_with_orders)
         api_authorization_header(current_user.auth_token)
         order = current_user.orders.sample
+        order.save
         get :show, user_id: current_user.name, id: order.id
 
         expect(json_response[:data][:id]).to eq(order.id)
+        expect(json_response[:data][:total]).to eq(order.total.to_s)
+        expect(json_response[:data][:products].size).to eq(order.products.size)
         expect(response).to have_http_status(:ok)
       end
     end
