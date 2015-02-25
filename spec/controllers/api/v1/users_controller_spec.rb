@@ -3,11 +3,12 @@ require 'request_helpers'
 
 RSpec.describe Api::V1::UsersController do
   describe "GET #show" do
-    it "returns user in json format" do
-      user = Fabricate(:user)
+    it "returns user with product ids in json format" do
+      user = Fabricate(:user_with_products)
       get :show, id: user.name
 
       expect(json_response[:data][:name]).to eq(user.name)
+      expect(json_response[:data][:product_ids]).to eq(user.product_ids)
       expect(response).to have_http_status(:ok)
     end
   end

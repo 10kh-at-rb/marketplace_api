@@ -4,3 +4,7 @@ Fabricator(:user) do
   password 'foobarfoo'
   password_confirmation 'foobarfoo'
 end
+
+Fabricator(:user_with_products, from: :user) do
+  products(count: 3)
+end

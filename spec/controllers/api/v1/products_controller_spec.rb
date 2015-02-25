@@ -14,15 +14,28 @@ RSpec.describe Api::V1::ProductsController do
   end
 
   describe "GET #index" do
-    it "returns a list of products with users in json" do
-      3.times { Fabricate(:product) }
-      get :index
+    context "without product_ids parameter" do
+      it "returns a list of products with users in json" do
+        3.times { Fabricate(:product) }
+        get :index
 
-      expect(json_response[:data].size).to eq(3)
-      json_response[:data].each do |product|
-        expect(product[:user]).to be_present
+        expect(json_response[:data].size).to eq(3)
+        json_response[:data].each do |product|
+          expect(product[:user]).to be_present
+        end
+        expect(response).to have_http_status(:ok)
       end
-      expect(response).to have_http_status(:ok)
+    end
+
+    context "with product_ids parameter" do
+      it "returns the requested products" do
+        user = Fabricate(:user_with_products)
+        get :index, product_ids: user.product_ids
+        json_response[:data].each do |product|
+          expect(product[:user][:name]).to eq(user.name)
+        end
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 
