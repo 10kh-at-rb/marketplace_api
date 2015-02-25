@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def authorize!
-    friendly_id = params[:id] || params[:user_id]
+    friendly_id = params[:user_id] || params[:id]
     if User.friendly.find(friendly_id) != current_user
       render json: { errors: "Not authorized" }, status: :unauthorized
     end
