@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'request_helpers'
 
 RSpec.describe Api::V1::SessionsController do
+  include Devise::TestHelpers
+
   describe "POST #create" do
     let(:user) { Fabricate(:user, password: "foobarfoo",
                            password_confirmation: "foobarfoo") }

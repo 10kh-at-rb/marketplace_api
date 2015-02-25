@@ -23,9 +23,8 @@ module RequestHelpers
 end
 
 RSpec.configure do |config|
-  config.include RequestHelpers
-  config.include Devise::TestHelpers
-  config.before(:example) do
+  config.include RequestHelpers, type: :controller
+  config.before(:example, type: :controller) do
     include_default_accept_headers
   end
 end
