@@ -25,4 +25,5 @@ end
 
 group :test do
   gem 'shoulda-matchers', '~> 2.8.0', require: false
+  gem 'email_spec', '~> 1.6.0'
 end

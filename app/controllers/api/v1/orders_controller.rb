@@ -12,7 +12,7 @@ class Api::V1::OrdersController < ApplicationController
 
   def create
     order = current_user.orders.build(order_params)
-    order.save
+    OrderMailer.send_confirmation(order).deliver_now if order.save
     respond_with order, status: :created, location: [:api, current_user, order]
   end
 
