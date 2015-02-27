@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225170238) do
+ActiveRecord::Schema.define(version: 20150226115759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,13 +38,14 @@ ActiveRecord::Schema.define(version: 20150225170238) do
 
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
 
-  create_table "orders_products", id: false, force: :cascade do |t|
-    t.integer "order_id",   null: false
-    t.integer "product_id", null: false
+  create_table "product_entries", id: false, force: :cascade do |t|
+    t.integer "order_id",               null: false
+    t.integer "product_id",             null: false
+    t.integer "quantity",   default: 0, null: false
   end
 
-  add_index "orders_products", ["order_id"], name: "index_orders_products_on_order_id", using: :btree
-  add_index "orders_products", ["product_id"], name: "index_orders_products_on_product_id", using: :btree
+  add_index "product_entries", ["order_id"], name: "index_product_entries_on_order_id", using: :btree
+  add_index "product_entries", ["product_id"], name: "index_product_entries_on_product_id", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.integer  "user_id"
@@ -54,6 +55,7 @@ ActiveRecord::Schema.define(version: 20150225170238) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.string   "slug",                       null: false
+    t.integer  "quantity",   default: 0,     null: false
   end
 
   add_index "products", ["slug"], name: "index_products_on_slug", unique: true, using: :btree
@@ -82,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150225170238) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "orders", "users", on_delete: :cascade
-  add_foreign_key "orders_products", "orders", on_delete: :cascade
-  add_foreign_key "orders_products", "products", on_delete: :cascade
+  add_foreign_key "product_entries", "orders", on_delete: :cascade
+  add_foreign_key "product_entries", "products", on_delete: :cascade
   add_foreign_key "products", "users", on_delete: :cascade
 end

@@ -4,9 +4,9 @@ RSpec.describe Order do
   subject { Fabricate.build(:order) }
 
   it { is_expected.to validate_presence_of(:user) }
-  it { is_expected.to validate_presence_of(:products) }
   it { is_expected.to belong_to(:user) }
-  it { is_expected.to have_and_belong_to_many(:products) }
+  it { is_expected.to have_many(:product_entries) }
+  it { is_expected.to have_many(:products).through(:product_entries) }
 
   describe '#set_total!' do
     it "sets the total price of the order" do

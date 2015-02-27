@@ -81,18 +81,39 @@ RSpec.describe Api::V1::OrdersController do
 
   describe "POST #create" do
     context "correct order" do
-      it "returns the just user order record" do
-        current_user = Fabricate(:user)
+      let(:current_user) { Fabricate(:user) }
+      let(:p1) { Fabricate(:product) }
+      let(:p2) { Fabricate(:product) }
+
+      before(:example) do
         api_authorization_header(current_user.auth_token)
-        p1, p2 = Fabricate(:product), Fabricate(:product)
+        post :create, user_id: current_user.name,
+                      order: { a_list: [[p1.id, 2], [p2.id, 3]] }
+      end
 
-        expect do
-          post :create, user_id: current_user.name,
-                        order: { product_ids: [p1.id, p2.id] }
-        end.to change(Order, :count).by(1)
+      it "creates order in the database" do
+        expect(
+          Order.find(json_response[:data][:id]).products
+        ).to contain_exactly(p1, p2)
+      end
 
-        expect(json_response[:data][:id]).to be_present
+      it "returns order details" do
+        expect(json_response[:data][:products].size).to eq(2)
         expect(response).to have_http_status(:created)
+      end
+    end
+
+    context "incorrect order with bad data" do
+      it "returns the errors" do
+        current_user = Fabricate(:user)
+        p1, p2 = Fabricate(:product), Fabricate(:product)
+        api_authorization_header(current_user.auth_token)
+
+        post :create, user_id: current_user.name,
+                      order: { a_list: [[1, 1], [-1, 1]] }
+
+        expect(json_response[:errors]).to include("Invalid product id")
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
@@ -103,7 +124,7 @@ RSpec.describe Api::V1::OrdersController do
         api_authorization_header(current_user.auth_token)
 
         post :create, user_id: another_user.name,
-                      order: { product_ids: [p1.id, p2.id] }
+                      order: { a_list: [[p1.id, 1], [p2.id, 1]] }
 
         expect(json_response[:errors]).to include("Not authorized")
         expect(response).to have_http_status(:unauthorized)
@@ -116,7 +137,7 @@ RSpec.describe Api::V1::OrdersController do
         p1, p2 = Fabricate(:product), Fabricate(:product)
 
         post :create, user_id: current_user.name,
-                      order: { product_ids: [p1.id, p2.id] }
+                      order: { a_list: [[p1.id, 1], [p2.id, 1]] }
 
         expect(json_response[:errors]).to include("Not authorized")
         expect(response).to have_http_status(:unauthorized)

@@ -7,7 +7,8 @@ RSpec.describe Product do
   it { is_expected.to respond_to(:price) }
   it { is_expected.to respond_to(:for_sale) }
   it { is_expected.to belong_to(:user) }
-  it { is_expected.to have_and_belong_to_many(:orders) }
+  it { is_expected.to have_many(:product_entries) }
+  it { is_expected.to have_many(:orders).through(:product_entries) }
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:price) }
   it { is_expected.to validate_numericality_of(:price).is_greater_than_or_equal_to(0) }
@@ -19,7 +20,7 @@ RSpec.describe Product do
       orders = product.orders
       product.destroy
       orders.each do |order|
-        expect(Order.find(order.id)).not_to raise_error
+        expect { Order.find(order.id) }.not_to raise_error
       end
     end
   end

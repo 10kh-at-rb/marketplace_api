@@ -1,8 +1,9 @@
 class Order < ActiveRecord::Base
   belongs_to :user
-  has_and_belongs_to_many :products
+  has_many :product_entries
+  has_many :products, through: :product_entries
   before_validation :set_total!
-  validates :user, :products, presence: true
+  validates :user, presence: true
 
   def set_total!
     self.total = products.sum(:price)

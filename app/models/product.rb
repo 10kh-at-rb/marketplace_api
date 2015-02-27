@@ -4,7 +4,8 @@ class Product < ActiveRecord::Base
   friendly_id :slug_candidates, use: :slugged
 
   belongs_to :user
-  has_and_belongs_to_many :orders
+  has_many :product_entries
+  has_many :orders, through: :product_entries
 
   validates :user, :title, :price, presence: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }

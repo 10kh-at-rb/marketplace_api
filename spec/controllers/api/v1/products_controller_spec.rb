@@ -15,11 +15,11 @@ RSpec.describe Api::V1::ProductsController do
 
   describe "GET #index" do
     context "without product_ids parameter" do
-      it "returns a list of products with users in json" do
+      it "returns a list of products with users" do
         3.times { Fabricate(:product) }
         get :index
 
-        expect(json_response[:data].size).to eq(3)
+        expect(json_response[:data].size).to be >= 3
         json_response[:data].each do |product|
           expect(product[:user]).to be_present
         end
