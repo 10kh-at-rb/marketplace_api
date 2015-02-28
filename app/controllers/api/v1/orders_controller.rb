@@ -4,11 +4,7 @@ class Api::V1::OrdersController < ApplicationController
 
   def index
     orders = current_user.orders.page(params[:page]).per(params[:per_page])
-    render json: orders,
-      meta: { pagination: { per_page:     params[:per_page],
-                            total_pages:  params[:total_pages],
-                            total_objects: params[:total_objects] } },
-      root: "data"
+    render json: orders, meta: pagination(orders, params[:per_page]), root: "data"
   end
 
   def show
