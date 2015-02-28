@@ -15,16 +15,24 @@ RSpec.describe Api::V1::ProductsController do
 
   describe "GET #index" do
     context "without product_ids parameter" do
-      it "returns a list of products with users" do
+      before(:example) do
         3.times { Fabricate(:product) }
         get :index
+      end
 
+      it "returns a list of products with users" do
         expect(json_response[:data].size).to be >= 3
         json_response[:data].each do |product|
           expect(product[:user]).to be_present
         end
-        expect(response).to have_http_status(:ok)
       end
+
+      specify { expect(json_response).to have_key(:meta) }
+      specify { expect(json_response[:meta]).to have_key(:pagination) }
+      specify { expect(json_response[:meta][:pagination]).to have_key(:per_page) }
+      specify { expect(json_response[:meta][:pagination]).to have_key(:total_pages) }
+      specify { expect(json_response[:meta][:pagination]).to have_key(:total_objects) }
+      it      { is_expected.to respond_with(:ok) }
     end
 
     context "with product_ids parameter" do

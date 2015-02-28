@@ -24,8 +24,8 @@ class Product < ActiveRecord::Base
     where("price <= ?", n)
   end
 
-  def self.search(params)
-    p = params[:product_ids].present? ? find(params[:product_ids]) : all
+  def self.search(params = {})
+    p = params[:product_ids].present? ? where(id: params[:product_ids]) : all
     p = p.filter_by_title(params[:keyword]) if params[:keyword]
     p = p.above_or_equal_to_price(params[:min_price].to_f) if params[:min_price]
     p = p.below_or_equal_to_price(params[:max_price].to_f) if params[:max_price]
