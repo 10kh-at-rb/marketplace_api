@@ -1,3 +1,5 @@
+require 'support/shared_examples/pagination'
+
 module RequestHelpers
   def json_response
     @json_response ||= JSON.parse(response.body, symbolize_names: true)

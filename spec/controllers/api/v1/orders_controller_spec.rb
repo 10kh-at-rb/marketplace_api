@@ -4,20 +4,18 @@ require 'request_helpers'
 RSpec.describe Api::V1::OrdersController do
   describe "GET #index" do
     context "show current user orders" do
-      it "returns the orders" do
-        current_user = Fabricate(:user_with_orders)
-        api_authorization_header(current_user.auth_token)
-        get :index, user_id: current_user.name
-
-        expect(response).to have_http_status(:ok)
-        expect(json_response[:data].size).to eq(current_user.orders.size)
-
-        expect(json_response).to have_key(:meta)
-        expect(json_response[:meta]).to have_key(:pagination)
-        expect(json_response[:meta][:pagination]).to have_key(:per_page)
-        expect(json_response[:meta][:pagination]).to have_key(:total_pages)
-        expect(json_response[:meta][:pagination]).to have_key(:total_objects)
+      before(:example) do
+        @current_user = Fabricate(:user_with_orders)
+        api_authorization_header(@current_user.auth_token)
+        get :index, user_id: @current_user.name
       end
+
+      it "returns the orders" do
+        expect(response).to have_http_status(:ok)
+        expect(json_response[:data].size).to eq(@current_user.orders.size)
+      end
+
+      it_behaves_like "paginated list"
     end
 
     context "unauthenticated" do
@@ -103,7 +101,7 @@ RSpec.describe Api::V1::OrdersController do
         ).to contain_exactly(p1, p2)
       end
 
-      fit "returns order details" do
+      it "returns order details" do
         p1 = Fabricate(:product)
         p2 = Fabricate(:product)
         api_authorization_header(current_user.auth_token)
