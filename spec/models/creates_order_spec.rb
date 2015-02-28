@@ -31,4 +31,16 @@ RSpec.describe CreatesOrder do
       end.to change(p1, :quantity).by(-1)
     end
   end
+
+  describe "#add_product_entry(product_id, quantity)" do
+    it "works with strings" do
+      user = Fabricate(:user)
+      product = Fabricate(:product)
+
+      expect do
+        CreatesOrder.new(user).add_product_entry(product.id.to_s, "2")
+        product.reload
+      end.to change(product, :quantity).by(-2)
+    end
+  end
 end

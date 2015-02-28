@@ -15,8 +15,8 @@ class CreatesOrder
 
   def add_product_entry(product_id, quantity)
     ProductEntry.create(
-      product_id: product_id, quantity: quantity, order_id: @order.id
+      product_id: product_id, quantity: quantity.to_i, order_id: @order.id
     )
-    Product.find(product_id).decrement!(:quantity, quantity)
+    Product.find(product_id).decrement!(:quantity, quantity.to_i)
   end
 end
