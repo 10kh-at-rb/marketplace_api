@@ -1,4 +1,4 @@
 Fabricator(:product_entry) do
   order
-  product
+  product { Fabricate(:product, quantity: 10) }
 end

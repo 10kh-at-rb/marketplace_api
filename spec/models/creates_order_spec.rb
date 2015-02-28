@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CreatesOrder do
-  describe ".from_list(user, a_list_of_ids_and_quantities)" do
+  describe "#from_list(user, a_list_of_ids_and_quantities)" do
     let!(:user)   { Fabricate(:user)         }
     let!(:order)  { Fabricate(:order)        }
     let!(:p1)     { Fabricate(:product)      }

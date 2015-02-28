@@ -6,14 +6,14 @@ class CreatesOrder
 
   def from_list(a_list)
     a_list.each do |product_id, quantity|
-      create_product_entry(product_id, quantity)
+      add_product_entry(product_id, quantity)
     end
     @order
   rescue
     nil
   end
 
-  def create_product_entry(product_id, quantity)
+  def add_product_entry(product_id, quantity)
     ProductEntry.create(
       product_id: product_id, quantity: quantity, order_id: @order.id
     )
