@@ -13,7 +13,7 @@ class Api::V1::OrdersController < ApplicationController
 
   def create
     if order = CreatesOrder.new(current_user).from_list(params[:order][:a_list])
-      OrderMailer.send_confirmation(order).deliver_now
+      OrderMailer.send_confirmation(order).deliver_later
       respond_with order, status: :created, location: [:api, current_user, order]
     else
       render json: { errors: "Invalid product id" }, status: :unprocessable_entity

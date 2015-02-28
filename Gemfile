@@ -13,6 +13,7 @@ gem 'devise', '~> 3.4.1'
 gem 'responders', '~> 2.1.0'
 gem 'friendly_id', '~> 5.1.0'
 gem 'kaminari', '~> 0.16.3'
+gem 'sidekiq', '~> 3.3.2'
 
 group :development, :test do
   gem 'pry-rails', '~> 0.3.3'
